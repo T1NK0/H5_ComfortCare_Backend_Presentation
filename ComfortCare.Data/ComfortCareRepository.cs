@@ -14,12 +14,14 @@ namespace ComfortCare.Data
     {
         #region fields
         private readonly ComfortCareDbContext _context;
+        private readonly IEntityFactory _entityFactory;
         #endregion
 
         #region Constructor
-        public ComfortCareRepository(ComfortCareDbContext context)
+        public ComfortCareRepository(ComfortCareDbContext context, IEntityFactory entityFactory)
         {
             _context = context;
+            _entityFactory = entityFactory;
         }
         #endregion
 
@@ -32,18 +34,16 @@ namespace ComfortCare.Data
         public List<AssignmentEntity> GetNumberOfAssignments(int assignments)
         {
             var result = _context.Assignment.Include(a => a.AssignmentType).ThenInclude(at => at.TimeFrame).ToList();
-            List<AssignmentEntity> assignmentEntities = new List<AssignmentEntity>();
+            List<AssignmentEntity> assignmentEntities = _entityFactory.CreateNewAssignmentsEntityList();
 
             for (int i = 0; i < assignments; i++)
             {
-                var temp = new AssignmentEntity()
-                {
-                    Duration = result[i].AssignmentType.DurationInSeconds,
-                    Id = result[i].Id,
-                    TimeWindowStart = result[i].AssignmentType.TimeFrame.TimeFrameStart,
-                    TimeWindowEnd = result[i].AssignmentType.TimeFrame.TimeFrameEnd,
-                    ArrivalTime = DateTime.MinValue
-                };
+                var temp = _entityFactory.CreateNewAssignmentEntity();
+                temp.Duration = result[i].AssignmentType.DurationInSeconds;
+                temp.Id = result[i].Id;
+                temp.TimeWindowStart = result[i].AssignmentType.TimeFrame.TimeFrameStart;
+                temp.TimeWindowEnd = result[i].AssignmentType.TimeFrame.TimeFrameEnd;
+                temp.ArrivalTime = DateTime.MinValue;
                 assignmentEntities.Add(temp);
             }
             return assignmentEntities;
@@ -58,16 +58,13 @@ namespace ComfortCare.Data
         {
             List<int> assignmentIds = assignmentsForPeriod.Select(a => a.Id).ToList();
             var distancesQuery = _context.Distance.Where(d => assignmentIds.Contains(d.ResidenceOneId) && assignmentIds.Contains(d.ResidenceTwoId)).ToList();
-            List<DistanceEntity> result = new List<DistanceEntity>();
+            List<DistanceEntity> result = _entityFactory.CreateNewDistancesEntityList();
             foreach (var distance in distancesQuery)
             {
-                var temp = new DistanceEntity()
-                {
-                    AssignmentOne = distance.ResidenceOneId,
-                    AssignmentTwo = distance.ResidenceTwoId,
-                    DistanceBetween = distance.Duration
-                };
-
+                var temp = _entityFactory.CreateNewDistanceEntity();
+                temp.AssignmentOne = distance.ResidenceOneId;
+                temp.AssignmentTwo = distance.ResidenceTwoId;
+                temp.DistanceBetween = distance.Duration;
                 result.Add(temp);
             }
             return result;
@@ -95,15 +92,13 @@ namespace ComfortCare.Data
                     .ThenInclude(tr => tr.TimeRegistration);
 
 
-            List<EmployeeEntity> employees = new();
+            List<EmployeeEntity> employees = _entityFactory.CreateNewEmployeeEntityList();
             foreach (var employee in employeeQuery)
             {
-                var temp = new EmployeeEntity()
-                {
-                    EmployeeId = employee.Id,
-                    Weeklyworkhours = employee.WeeklyWorkingHours,
-                    EmployeeType = employee.EmployeeTypeId,
-                };
+                var temp = _entityFactory.CreateNewEmployeeEntity();
+                temp.EmployeeId = employee.Id;
+                temp.Weeklyworkhours = employee.WeeklyWorkingHours;
+                temp.EmployeeType = employee.EmployeeTypeId;
                 employees.Add(temp);
             }
             return employees;

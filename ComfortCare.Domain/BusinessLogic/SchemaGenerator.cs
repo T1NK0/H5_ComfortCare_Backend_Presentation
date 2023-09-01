@@ -11,12 +11,14 @@ namespace ComfortCare.Domain.BusinessLogic
     {
         #region Fields
         private readonly IEmployeesRepo _employeesRepo;
+        private readonly IEntityFactory _entityFactory;
         #endregion
 
         #region Constructor 
-        public SchemaGenerator(IEmployeesRepo employeesRepo)
+        public SchemaGenerator(IEmployeesRepo employeesRepo, IEntityFactory entityFactory)
         {
             _employeesRepo = employeesRepo;
+            _entityFactory = entityFactory;
         }
         #endregion
 
@@ -70,8 +72,8 @@ namespace ComfortCare.Domain.BusinessLogic
         private List<List<RouteEntity>> SplitRoutesByTime(List<RouteEntity> routes)
         {
             // Initialize lists to hold long and short routes
-            var longRoutes = new List<RouteEntity>();
-            var shortRoutes = new List<RouteEntity>();
+            var longRoutes = _entityFactory.CreateNewRouteEntityList();
+            var shortRoutes = _entityFactory.CreateNewRouteEntityList();
 
             // Loop through each route in the list
             foreach (RouteEntity routeEntity in routes)
@@ -127,7 +129,7 @@ namespace ComfortCare.Domain.BusinessLogic
         private List<EmployeeEntity> AssignRoutesToEmployees(List<List<RouteEntity>> splitRoutes, List<EmployeeEntity> employeesFullTime, List<EmployeeEntity> employeesPartTime30Hours, List<EmployeeEntity> employeesPartTime25Hours, List<EmployeeEntity> employeesSubstitutes)
         {
             // Initialize a list to keep track of employees who are needed for the routes
-            var employeesNeededForTheRoutes = new List<EmployeeEntity>();
+            var employeesNeededForTheRoutes = _entityFactory.CreateNewEmployeeEntityList();
 
             // Assign long routes to full-time employees
             AssignRoutesToSpecificEmployees(splitRoutes[0], employeesFullTime);
@@ -307,7 +309,10 @@ namespace ComfortCare.Domain.BusinessLogic
             employee.WorkBlocksPerDay[routeDay].Add((routeStartTime, routeEndTime));
 
             // Add the route information to the WorkingDaysList
-            employee.WorkingDaysList.Add(new TimeSpanEntity { RouteStart = routeStartTime, RouteEnd = routeEndTime });
+            var temp = _entityFactory.CreateNewTimeSpanEntity();
+            temp.RouteStart = routeStartTime;
+            temp.RouteEnd = routeEndTime;
+            employee.WorkingDaysList.Add(temp);
         }
         #endregion
     }
