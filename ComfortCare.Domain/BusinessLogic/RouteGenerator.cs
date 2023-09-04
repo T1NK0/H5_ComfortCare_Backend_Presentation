@@ -13,14 +13,12 @@ namespace ComfortCare.Domain.BusinessLogic
     {
         #region fields
         private readonly IRouteRepo _routeRepo;
-        private readonly IEntityFactory _entityFactory;
         #endregion
 
         #region Constructor
-        public RouteGenerator(IRouteRepo routeRepo, IEntityFactory entityFactory)
+        public RouteGenerator(IRouteRepo routeRepo)
         {
             _routeRepo = routeRepo;
-            _entityFactory = entityFactory;
         }
         #endregion
 
@@ -41,7 +39,7 @@ namespace ComfortCare.Domain.BusinessLogic
             stopwatch.Start();
 #endif
 
-            var plannedRoutes = _entityFactory.CreateNewRouteEntityList();
+            var plannedRoutes = new List<RouteEntity>();
             var currentDay = DateTime.Now.Date;
 
             for (int dayIndex = 0; dayIndex < numberOfDays; dayIndex++)
@@ -64,8 +62,7 @@ namespace ComfortCare.Domain.BusinessLogic
 
                     var routeStartingTime = routeTimeTracker;
                     var currentAssignment = startAssignment;
-                    var route = _entityFactory.CreateNewAssignmentsEntityList();
-                    route.Add(startAssignment);
+                    var route = new List<AssignmentEntity> { startAssignment };
 
                     while (currentAssignment != null)
                     {
@@ -231,11 +228,7 @@ namespace ComfortCare.Domain.BusinessLogic
         /// <param name="currentDay"></param>
         private void AddPlannedRoute(List<RouteEntity> plannedRoutes, List<AssignmentEntity> route, DateTime currentDay)
         {
-            var temp = _entityFactory.CreateNewRouteEntity();
-            temp.RouteGuid = Guid.NewGuid();
-            temp.Assignments = route;
-            temp.RouteDate = currentDay;
-            plannedRoutes.Add(temp); ;
+            plannedRoutes.Add(new RouteEntity() { RouteGuid = Guid.NewGuid(), Assignments = route, RouteDate = currentDay });
         }
 
         /// <summary>
