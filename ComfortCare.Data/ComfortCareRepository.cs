@@ -136,7 +136,7 @@ namespace ComfortCare.Data
                     }
                 }
             }
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }     
 
         /// <summary>
