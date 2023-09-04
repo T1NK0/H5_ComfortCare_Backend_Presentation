@@ -11,11 +11,11 @@ namespace ComfortCare.Domain.BusinessLogic
     {
         #region Fields
         private readonly IEmployeesRepo _employeesRepo;
-        private readonly IEntity _entity;
+        private readonly IEntityFactory _entity;
         #endregion
 
         #region Constructor 
-        public SchemaGenerator(IEmployeesRepo employeesRepo, IEntity entity)
+        public SchemaGenerator(IEmployeesRepo employeesRepo, IEntityFactory entity)
         {
             _employeesRepo = employeesRepo;
             _entity = entity;
@@ -72,8 +72,8 @@ namespace ComfortCare.Domain.BusinessLogic
         private List<List<RouteEntity>> SplitRoutesByTime(List<RouteEntity> routes)
         {
             // Initialize lists to hold long and short routes
-            var longRoutes = _entity.CreateEntityList<RouteEntity>();
-            var shortRoutes = _entity.CreateEntityList<RouteEntity>();
+            var longRoutes = _entity.CreateNewEntityList<RouteEntity>();
+            var shortRoutes = _entity.CreateNewEntityList<RouteEntity>();
 
             // Loop through each route in the list
             foreach (RouteEntity routeEntity in routes)
@@ -129,7 +129,7 @@ namespace ComfortCare.Domain.BusinessLogic
         private List<EmployeeEntity> AssignRoutesToEmployees(List<List<RouteEntity>> splitRoutes, List<EmployeeEntity> employeesFullTime, List<EmployeeEntity> employeesPartTime30Hours, List<EmployeeEntity> employeesPartTime25Hours, List<EmployeeEntity> employeesSubstitutes)
         {
             // Initialize a list to keep track of employees who are needed for the routes
-            var employeesNeededForTheRoutes = _entity.CreateEntityList<EmployeeEntity>();
+            var employeesNeededForTheRoutes = _entity.CreateNewEntityList<EmployeeEntity>();
 
             // Assign long routes to full-time employees
             AssignRoutesToSpecificEmployees(splitRoutes[0], employeesFullTime);

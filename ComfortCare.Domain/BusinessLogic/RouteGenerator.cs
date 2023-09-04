@@ -13,11 +13,11 @@ namespace ComfortCare.Domain.BusinessLogic
     {
         #region fields
         private readonly IRouteRepo _routeRepo;
-        private readonly IEntity _entity;
+        private readonly IEntityFactory _entity;
         #endregion
 
         #region Constructor
-        public RouteGenerator(IRouteRepo routeRepo, IEntity entity)
+        public RouteGenerator(IRouteRepo routeRepo, IEntityFactory entity)
         {
             _routeRepo = routeRepo;
             _entity = entity;
@@ -41,7 +41,7 @@ namespace ComfortCare.Domain.BusinessLogic
             stopwatch.Start();
 #endif
 
-            var plannedRoutes = _entity.CreateEntityList<RouteEntity>();
+            var plannedRoutes = _entity.CreateNewEntityList<RouteEntity>();
             var currentDay = DateTime.Now.Date;
 
             for (int dayIndex = 0; dayIndex < numberOfDays; dayIndex++)
@@ -64,7 +64,7 @@ namespace ComfortCare.Domain.BusinessLogic
 
                     var routeStartingTime = routeTimeTracker;
                     var currentAssignment = startAssignment;
-                    var route = _entity.CreateEntityList<AssignmentEntity>();
+                    var route = _entity.CreateNewEntityList<AssignmentEntity>();
                     route.Add(startAssignment);
 
                     while (currentAssignment != null)

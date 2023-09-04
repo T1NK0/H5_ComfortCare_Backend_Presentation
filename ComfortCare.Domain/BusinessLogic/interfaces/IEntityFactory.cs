@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ComfortCare.Domain.BusinessLogic.interfaces
 {
-    public interface IEntity
+    public interface IEntityFactory
     {
-        public T CreateEntity<T>() where T: new();
-        public List<T> CreateEntityList<T>();
+        public T CreateNewEntity<T>() where T: new();
+        public List<T> CreateNewEntityList<T>();
     }
 }

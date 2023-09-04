@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace ComfortCare.Domain.BusinessLogic
 {
-    public class EntityFactoryImpl : IEntity
+    public class EntityFactoryImpl : IEntityFactory
     {
-        public T CreateEntity<T>() where T : new()
+        public T CreateNewEntity<T>() where T : new()
         {
             return new T();
         }
 
-        public List<T> CreateEntityList<T>()
+        public List<T> CreateNewEntityList<T>()
         {
             return new List<T>();
         }

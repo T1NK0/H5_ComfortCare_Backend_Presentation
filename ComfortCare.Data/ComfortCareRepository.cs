@@ -1,6 +1,5 @@
 ﻿using ComfortCare.Data.Interfaces;
 using ComfortCare.Data.Models;
-using ComfortCare.Domain.BusinessLogic;
 using ComfortCare.Domain.BusinessLogic.interfaces;
 using ComfortCare.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +14,11 @@ namespace ComfortCare.Data
     {
         #region fields
         private readonly ComfortCareDbContext _context;
-        private readonly EntityFactoryImpl _entityFactory;
+        private readonly IEntityFactory _entityFactory;
         #endregion
 
         #region Constructor
-        public ComfortCareRepository(ComfortCareDbContext context, EntityFactoryImpl entityFactory)
+        public ComfortCareRepository(ComfortCareDbContext context, IEntityFactory entityFactory)
         {
             _context = context;
             _entityFactory = entityFactory;
@@ -35,11 +34,11 @@ namespace ComfortCare.Data
         public List<AssignmentEntity> GetNumberOfAssignments(int assignments)
         {
             var result = _context.Assignment.Include(a => a.AssignmentType).ThenInclude(at => at.TimeFrame).ToList();
-            List<AssignmentEntity> assignmentEntities = _entityFactory.CreateNewAssignmentListEntity();
+            List<AssignmentEntity> assignmentEntities = _entityFactory.CreateNewEntityList<AssignmentEntity>();
 
             for (int i = 0; i < assignments; i++)
             {
-                var temp = _entityFactory.CreateNewAssignmentEntity();
+                var temp = _entityFactory.CreateNewEntity<AssignmentEntity>();
                 temp.Duration = result[i].AssignmentType.DurationInSeconds;
                 temp.Id = result[i].Id;
                 temp.TimeWindowStart = result[i].AssignmentType.TimeFrame.TimeFrameStart;
@@ -59,10 +58,10 @@ namespace ComfortCare.Data
         {
             List<int> assignmentIds = assignmentsForPeriod.Select(a => a.Id).ToList();
             var distancesQuery = _context.Distance.Where(d => assignmentIds.Contains(d.ResidenceOneId) && assignmentIds.Contains(d.ResidenceTwoId)).ToList();
-            List<DistanceEntity> result = _entityFactory.CreateNewDistanceListEntity();
+            List<DistanceEntity> result = _entityFactory.CreateNewEntityList<DistanceEntity>();
             foreach (var distance in distancesQuery)
             {
-                var temp = _entityFactory.CreateNewDistanceEntity();
+                var temp = _entityFactory.CreateNewEntity<DistanceEntity>();
                 temp.AssignmentOne = distance.ResidenceOneId;
                 temp.AssignmentTwo = distance.ResidenceTwoId;
                 temp.DistanceBetween = distance.Duration;
@@ -93,10 +92,10 @@ namespace ComfortCare.Data
                     .ThenInclude(tr => tr.TimeRegistration);
 
 
-            List<EmployeeEntity> employees = _entityFactory.CreateNewEmployeeListEntity();
+            List<EmployeeEntity> employees = _entityFactory.CreateNewEntityList<EmployeeEntity>();
             foreach (var employee in employeeQuery)
             {
-                var temp = _entityFactory.CreateNewEmployeeEntity();
+                var temp = _entityFactory.CreateNewEntity<EmployeeEntity>();
                 temp.EmployeeId = employee.Id;
                 temp.Weeklyworkhours = employee.WeeklyWorkingHours;
                 temp.EmployeeType = employee.EmployeeTypeId;
@@ -104,7 +103,7 @@ namespace ComfortCare.Data
             }
             return employees;
         }
-       
+
         /// <summary>
         /// This method maps and saves routes to employees in the database
         /// </summary>
@@ -137,8 +136,8 @@ namespace ComfortCare.Data
                     }
                 }
             }
-            _context.SaveChanges();
-        }     
+            //_context.SaveChanges();
+        }
 
         /// <summary>
         /// this method validate wheter a user exist in the db
@@ -181,7 +180,7 @@ namespace ComfortCare.Data
                             .ThenInclude(citizen => citizen.Residence)
             .FirstOrDefault(e => e.Initials == username && e.EmployeePassword == password);
 
-            return employee;            
+            return employee;
         }
         #endregion
     }
