@@ -1,5 +1,4 @@
 ﻿using ComfortCare.Domain.BusinessLogic.interfaces;
-using ComfortCare.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,51 +7,16 @@ using System.Threading.Tasks;
 
 namespace ComfortCare.Domain.BusinessLogic
 {
-    public class EntityFactoryImpl : IEntityFactory
+    public class EntityFactoryImpl : IEntity
     {
-        public AssignmentEntity CreateNewAssignmentEntity()
+        public T CreateEntity<T>() where T : new()
         {
-            return new AssignmentEntity();
-        }
-        public List<AssignmentEntity> CreateNewAssignmentListEntity() 
-        {
-            return new List<AssignmentEntity>();
+            return new T();
         }
 
-        public DistanceEntity CreateNewDistanceEntity() 
-        { 
-            return new DistanceEntity(); 
-        }
-        public List<DistanceEntity> CreateNewDistanceListEntity()
+        public List<T> CreateEntityList<T>()
         {
-            return new List<DistanceEntity>();
-        }
-        
-        public EmployeeEntity  CreateNewEmployeeEntity()
-        {
-            return new EmployeeEntity();
-        }
-        public List<EmployeeEntity> CreateNewEmployeeListEntity()
-        {
-            return new List<EmployeeEntity>();
-        }
-
-        public RouteEntity CreateNewRouteEntity()
-        {
-            return new RouteEntity();
-        }
-        public List<RouteEntity> CreateNewRouteListEntity()
-        {
-            return new List<RouteEntity>();
-        }
-
-        public TimeSpanEntity CreateNewTimeSpanEntity() 
-        { 
-            return new TimeSpanEntity(); 
-        }
-        public List<TimeSpanEntity> CreateNewTimeSpanListEntity()
-        {
-            return new List<TimeSpanEntity>();
+            return new List<T>();
         }
     }
 }

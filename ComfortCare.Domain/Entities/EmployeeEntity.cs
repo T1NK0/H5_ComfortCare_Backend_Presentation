@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ComfortCare.Domain.Entities
 {
     /// <summary>
-    /// This class is used as an entity that hold the Employees for generating Schemas,
+    /// This class is used as an _entity that hold the Employees for generating Schemas,
     /// </summary>
     public class EmployeeEntity
     {

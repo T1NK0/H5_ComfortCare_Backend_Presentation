@@ -1,7 +1,7 @@
 ﻿namespace ComfortCare.Domain.Entities
 {
     /// <summary>
-    /// This class is the entity of a single route that contains a list of assignment for a single day
+    /// This class is the _entity of a single route that contains a list of assignment for a single day
     /// </summary>
     public class RouteEntity
     {

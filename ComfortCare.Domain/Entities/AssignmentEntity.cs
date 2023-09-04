@@ -1,7 +1,7 @@
 ﻿namespace ComfortCare.Domain.Entities
 {
     /// <summary>
-    /// This class is used as an entity to hold the assignmets that is not yet been assigned to an employee
+    /// This class is used as an _entity to hold the assignmets that is not yet been assigned to an employee
     /// </summary>
     public class AssignmentEntity
     {
