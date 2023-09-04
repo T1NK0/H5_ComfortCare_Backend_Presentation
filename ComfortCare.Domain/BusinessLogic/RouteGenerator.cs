@@ -41,7 +41,7 @@ namespace ComfortCare.Domain.BusinessLogic
             stopwatch.Start();
 #endif
 
-            var plannedRoutes = _entityFactory.CreateNewRouteEntityList();
+            var plannedRoutes = _entityFactory.CreateNewEntityList<RouteEntity>();
             var currentDay = DateTime.Now.Date;
 
             for (int dayIndex = 0; dayIndex < numberOfDays; dayIndex++)
@@ -64,7 +64,7 @@ namespace ComfortCare.Domain.BusinessLogic
 
                     var routeStartingTime = routeTimeTracker;
                     var currentAssignment = startAssignment;
-                    var route = _entityFactory.CreateNewAssignmentsEntityList();
+                    var route = _entityFactory.CreateNewEntityList<AssignmentEntity>();
                     route.Add(startAssignment);
 
                     while (currentAssignment != null)
@@ -231,7 +231,7 @@ namespace ComfortCare.Domain.BusinessLogic
         /// <param name="currentDay"></param>
         private void AddPlannedRoute(List<RouteEntity> plannedRoutes, List<AssignmentEntity> route, DateTime currentDay)
         {
-            var temp = _entityFactory.CreateNewRouteEntity();
+            var temp = _entityFactory.CreateNewEntity<RouteEntity>();
             temp.RouteGuid = Guid.NewGuid();
             temp.Assignments = route;
             temp.RouteDate = currentDay;

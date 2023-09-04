@@ -34,11 +34,11 @@ namespace ComfortCare.Data
         public List<AssignmentEntity> GetNumberOfAssignments(int assignments)
         {
             var result = _context.Assignment.Include(a => a.AssignmentType).ThenInclude(at => at.TimeFrame).ToList();
-            List<AssignmentEntity> assignmentEntities = _entityFactory.CreateNewAssignmentsEntityList();
+            List<AssignmentEntity> assignmentEntities = _entityFactory.CreateNewEntityList<AssignmentEntity>();
 
             for (int i = 0; i < assignments; i++)
             {
-                var temp = _entityFactory.CreateNewAssignmentEntity();
+                var temp = _entityFactory.CreateNewEntity<AssignmentEntity>();
                 temp.Duration = result[i].AssignmentType.DurationInSeconds;
                 temp.Id = result[i].Id;
                 temp.TimeWindowStart = result[i].AssignmentType.TimeFrame.TimeFrameStart;
@@ -58,10 +58,10 @@ namespace ComfortCare.Data
         {
             List<int> assignmentIds = assignmentsForPeriod.Select(a => a.Id).ToList();
             var distancesQuery = _context.Distance.Where(d => assignmentIds.Contains(d.ResidenceOneId) && assignmentIds.Contains(d.ResidenceTwoId)).ToList();
-            List<DistanceEntity> result = _entityFactory.CreateNewDistancesEntityList();
+            List<DistanceEntity> result = _entityFactory.CreateNewEntityList<DistanceEntity>();
             foreach (var distance in distancesQuery)
             {
-                var temp = _entityFactory.CreateNewDistanceEntity();
+                var temp = _entityFactory.CreateNewEntity<DistanceEntity>();
                 temp.AssignmentOne = distance.ResidenceOneId;
                 temp.AssignmentTwo = distance.ResidenceTwoId;
                 temp.DistanceBetween = distance.Duration;
@@ -92,10 +92,10 @@ namespace ComfortCare.Data
                     .ThenInclude(tr => tr.TimeRegistration);
 
 
-            List<EmployeeEntity> employees = _entityFactory.CreateNewEmployeeEntityList();
+            List<EmployeeEntity> employees = _entityFactory.CreateNewEntityList<EmployeeEntity>();
             foreach (var employee in employeeQuery)
             {
-                var temp = _entityFactory.CreateNewEmployeeEntity();
+                var temp = _entityFactory.CreateNewEntity<EmployeeEntity>();
                 temp.EmployeeId = employee.Id;
                 temp.Weeklyworkhours = employee.WeeklyWorkingHours;
                 temp.EmployeeType = employee.EmployeeTypeId;
