@@ -14,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Context used by EF Core
-builder.Services.AddDbContext<ComfortCareDbContext>( opt =>
+builder.Services.AddDbContext<ComfortCareDbContext>(opt =>
 {
     var configuration = builder.Configuration;
     var connectionString = configuration.GetConnectionString("ComfortCareDbConnectionString");

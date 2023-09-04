@@ -5,14 +5,49 @@ namespace ComfortCare.Domain.BusinessLogic
 {
     public class EntityFactoryImpl : IEntityFactory
     {
-        public T CreateNewEntity<T>() where T: new()
+        public AssignmentEntity CreateNewAssignmentEntity()
         {
-            return new T();
+            return new AssignmentEntity();
+        }
+        public List<AssignmentEntity> CreateNewAssignmentsEntityList()
+        {
+            return new List<AssignmentEntity>();
         }
 
-        public List<T> CreateNewEntityList<T>()
+        public DistanceEntity CreateNewDistanceEntity()
         {
-            return new List<T>();
+            return new DistanceEntity();
+        }
+        public List<DistanceEntity> CreateNewDistancesEntityList()
+        {
+            return new List<DistanceEntity>();
+        }
+
+        public EmployeeEntity CreateNewEmployeeEntity()
+        {
+            return new EmployeeEntity();
+        }
+        public List<EmployeeEntity> CreateNewEmployeeEntityList()
+        {
+            return new List<EmployeeEntity>();
+        }
+
+        public RouteEntity CreateNewRouteEntity()
+        {
+            return new RouteEntity();
+        }
+        public List<RouteEntity> CreateNewRouteEntityList()
+        {
+            return new List<RouteEntity>();
+        }
+
+        public TimeSpanEntity CreateNewTimeSpanEntity()
+        {
+            return new TimeSpanEntity();
+        }
+        public List<TimeSpanEntity> CreateNewTimeSpanEntityList()
+        {
+            return new List<TimeSpanEntity>();
         }
     }
 }
